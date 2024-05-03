@@ -14,7 +14,7 @@ const port = process.env.PORT ?? 3000
 const storage = multer.memoryStorage()
 
 //Crea una instancia de Multer con una configuración específica de almacenamiento, en este caso, utilizando memoryStorage. Esto significa que los archivos cargados se almacenarán temporalmente en la memoria del servidor como buffers. La variable upload se convierte en un middleware que puede ser utilizado en rutas específicas de Express para manejar la carga de archivos.
-const upload = multer({ storage })
+const upload = multer({ storage: storage })
 
 let userData: Array<Record <string, string>> = []
 
@@ -28,7 +28,7 @@ app.post('/api/files', upload.single('file'), async (req, res) => {
         return res.status(500).json({ message: 'File is required' })
     }
     //3. Validate the mimetype (csv)
-    if(file.mimetype != 'text/csv'){
+    if(file.mimetype !== 'text/csv'){
         return res.status(500).json({ message: 'File must be CSV' })
     }
 
@@ -47,7 +47,7 @@ app.post('/api/files', upload.single('file'), async (req, res) => {
     userData = json
 
     //7. Return 200 with the message and the JSON
-    return res.status(200).json({ data:[], message: 'El archivo se cargó correctamente' })
+    return res.status(200).json({ data: userData, message: 'El archivo se cargó correctamente' })
 })
 
 app.get('/api/users/', async (req, res) => {
